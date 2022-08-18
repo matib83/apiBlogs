@@ -1,4 +1,4 @@
-// const http = require('http')
+require('dotenv').config()
 const express = require('express')
 const app = express()
 const cors = require('cors')
@@ -53,7 +53,7 @@ app.get('/', (request, response) => {
   response.send('<h1>API Blogs</h1>')
 })
 
-const PORT = 3003
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
