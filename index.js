@@ -11,9 +11,17 @@ const blogSchema = new mongoose.Schema({
   likes: Number
 })
 
+blogSchema.set('toJSON', {
+  transform: (document, returnedObject) => {
+    returnedObject.id = returnedObject._id
+    delete returnedObject._id
+    delete returnedObject.__v
+  }
+})
+
 const Blog = mongoose.model('Blog', blogSchema)
-const mongoUrl = 'mongodb://localhost:27017/bloglist'
-mongoose.connect(mongoUrl, {
+const { MONGO_DB_URI } = process.env
+mongoose.connect(MONGO_DB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 })
