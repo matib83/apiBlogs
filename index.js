@@ -2,6 +2,7 @@ require('dotenv').config()
 const express = require('express')
 const app = express()
 const cors = require('cors')
+require('./mongo')
 const mongoose = require('mongoose')
 
 const blogSchema = new mongoose.Schema({
@@ -20,21 +21,6 @@ blogSchema.set('toJSON', {
 })
 
 const Blog = mongoose.model('Blog', blogSchema)
-const { MONGO_DB_URI } = process.env
-mongoose.connect(MONGO_DB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-})
-  .then(() => {
-    console.log('Database connected')
-  }).catch(err => {
-    console.log(err)
-  })
-
-process.on('uncaughtException', error => {
-  console.error(error)
-  mongoose.disconnect()
-})
 
 app.use(cors())
 app.use(express.json())
