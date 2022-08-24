@@ -11,7 +11,7 @@ const totalLikes = (blogs) => {
 const favoriteBlog = (blogs) => {
   if (blogs === null || blogs === undefined || blogs.length === 0) return 0
   const maxLike = Math.max(...blogs.map(b => b.likes))
-  return blogs.filter(b => b.likes === maxLike)[0]
+  return blogs.filter(b => b.likes === maxLike)
 }
 
 const mostBlogs = (blogs) => {
