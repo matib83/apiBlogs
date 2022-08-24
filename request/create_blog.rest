@@ -2,8 +2,8 @@ POST http://localhost:3003/api/blogs
 Content-type: application/json
 
 {
-  "title": "Lo que el vientonse llevo",
-  "author": "Sabato Ernesto",
-  "url": "www.loquelvientosellevo.com",
-  "likes": 10
+    "title": "TDD harms architecture",
+    "author": "Robert C. Martin",
+    "url": "http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html",
+    "likes": 2
 }
