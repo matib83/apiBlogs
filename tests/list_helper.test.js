@@ -1,5 +1,5 @@
 const listHelper = require('../utils/list_helper')
-const { listEmptyBlog, listWithOneBlog, listBlogs } = require('./helpers')
+const { listEmptyBlog, listWithOneBlog, initialBlogs } = require('./helpers')
 
 test('dummy returns one', () => {
   const blogs = []
@@ -20,7 +20,7 @@ describe('total likes', () => {
   })
 
   test('of a bigger list is calculated right', () => {
-    const result = listHelper.totalLikes(listBlogs)
+    const result = listHelper.totalLikes(initialBlogs)
     expect(result).toBe(41)
   })
 })
@@ -37,8 +37,8 @@ describe('favorite Blog', () => {
   })
 
   test('of a bigger list is calculated right', () => {
-    const result = listHelper.favoriteBlog(listBlogs)
-    expect(result).toEqual(listBlogs.filter(b => b.likes === 12))
+    const result = listHelper.favoriteBlog(initialBlogs)
+    expect(result).toEqual(initialBlogs.filter(b => b.likes === 12))
   })
 })
 
@@ -54,7 +54,7 @@ describe('most author Blogs', () => {
   })
 
   test('of a bigger list is calculated right', () => {
-    const result = listHelper.mostBlogs(listBlogs)
+    const result = listHelper.mostBlogs(initialBlogs)
     expect(result).toEqual({ author: 'Robert C. Martin', blogs: 3 })
   })
 })
@@ -71,7 +71,7 @@ describe('favorite author', () => {
   })
 
   test('of a bigger list is calculated right', () => {
-    const result = listHelper.mostLikes(listBlogs)
+    const result = listHelper.mostLikes(initialBlogs)
     expect(result).toEqual({ author: 'Edsger W. Dijkstra', likes: 20 })
   })
 })

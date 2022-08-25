@@ -4,10 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "cross-env NODE=production node index.js",
-    "dev": "cross-env NODE=development nodemon index.js",
-    "test": "cross-env NODE=test jest --verbose --silent=false",
-    "test:watch": "cross-env NODE=test npm run test -- --watch"
+    "start": "cross-env NODE_ENV=production node index.js",
+    "dev": "cross-env NODE_ENV=development nodemon index.js",
+    "test": "cross-env NODE_ENV=test PORT=1234 jest --verbose --silent=false tests/blogs.test.js",
+    "test:watch": "cross-env NODE_ENV=test npm run test -- --watch"
   },
   "repository": {
     "type": "git",
@@ -23,10 +23,12 @@
   "devDependencies": {
     "jest": "28.1.3",
     "nodemon": "2.0.19",
-    "standard": "17.0.0"
+    "standard": "17.0.0",
+    "supertest": "^6.2.4"
   },
   "dependencies": {
     "cors": "2.8.5",
+    "cross-env": "7.0.3",
     "dotenv": "16.0.1",
     "express": "4.18.1",
     "mongoose": "6.5.2"
