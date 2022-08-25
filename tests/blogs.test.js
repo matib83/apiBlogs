@@ -1,8 +1,17 @@
 const mongoose = require('mongoose')
-const supertest = require('supertest')
-const { app, server } = require('../index')
+const { server } = require('../index')
+const Blog = require('../models/Blog')
+const { api, initialBlogs } = require('./helpers')
 
-const api = supertest(app)
+beforeEach(async () => {
+  await Blog.deleteMany({})
+
+  // sequential (para asegurar que los datos traidos de mi BD vengan en el mismo orden, pero es mas lento)
+  for (const blog of initialBlogs) {
+    const blogsObjects = new Blog(blog)
+    await blogsObjects.save()
+  }
+})
 
 test('blogs are returned as json', async () => {
   await api
@@ -11,16 +20,17 @@ test('blogs are returned as json', async () => {
     .expect('Content-Type', /application\/json/)
 })
 
-test('there are seven blogs', async () => {
+test('all blogs are returned', async () => {
   const response = await api.get('/api/blogs')
 
-  expect(response.body).toHaveLength(7)
+  expect(response.body).toHaveLength(initialBlogs.length)
 })
 
-test('the first blog is about HTTP methods', async () => {
+test('a specific blog is within the returned blogs', async () => {
   const response = await api.get('/api/blogs')
 
-  expect(response.body[0].author).toBe('Sabato Ernesto')
+  const titles = response.body.map(r => r.title)
+  expect(titles).toContain('Go To Statement Considered Harmful')
 })
 
 afterAll(() => {
