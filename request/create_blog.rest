@@ -2,8 +2,8 @@ POST http://localhost:3003/api/blogs
 Content-type: application/json
 
 {
-    "title": "TDD harms architecture",
-    "author": "Robert C. Martin",
-    "url": "http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html",
+    "title": "Pruebo con los likes",
+    "author": "Mati test",
+    "url": "no tiene",
     "likes": 2
 }
