@@ -21,7 +21,7 @@ describe('GET all blogs', () => {
       .expect('Content-Type', /application\/json/)
   })
 
-  test('are returned', async () => {
+  test('all blogs are returned', async () => {
     const response = await api.get('/api/blogs')
 
     expect(response.body).toHaveLength(initialBlogs.length)
@@ -36,18 +36,16 @@ describe('GET all blogs', () => {
 
   test('the unique identification property from the blogs are id', async () => {
     const response = await api.get('/api/blogs')
-    console.log(response.body)
-    // console.log(response.body.toJSON())
     response.body.forEach(blog => expect(blog.id).toBeDefined())
   })
 })
 
 describe('Create a Blog', () => {
-  test('a valid blog can be added', async () => {
+  test('wiht a valid blog can be added', async () => {
     const newBlog = {
-      title: 'Sobre héroes y tumbas',
-      author: 'Sabato Ernesto',
-      url: 'www.sabato/sobreheroesytumbas.com',
+      title: 'Pruebo creando un nuevo blog válido',
+      author: 'Mati test',
+      url: 'N/A',
       likes: 8
     }
 
@@ -62,7 +60,27 @@ describe('Create a Blog', () => {
     const titles = response.body.map(r => r.title)
 
     expect(response.body).toHaveLength(initialBlogs.length + 1)
-    expect(titles).toContain('Sobre héroes y tumbas')
+    expect(titles).toContain('Pruebo creando un nuevo blog válido')
+  })
+
+  test('without likes is added with default likes=0', async () => {
+    const newBlog = {
+      title: 'Pruebo blog sin likes',
+      author: 'Mati test',
+      url: 'N/A'
+    }
+
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(201)
+
+    const response = await api.get('/api/blogs')
+    // console.log('PRUEBO SIN LIKES')
+    // console.log(initialBlogs.length)
+    // console.log(response.body)
+    // console.log(response.body[initialBlogs.length].id)
+    expect(response.body[initialBlogs.length].likes).toBe(0)
   })
 
   /* test('blog without title is not added', async () => {
