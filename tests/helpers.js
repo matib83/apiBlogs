@@ -2,6 +2,8 @@ const { app } = require('../index')
 const supertest = require('supertest')
 const api = supertest(app)
 
+const ValidNonExistingId = '1308deceaa7c47d123456789'
+
 const listEmptyBlog = []
 
 const listWithOneBlog = [
@@ -62,5 +64,6 @@ module.exports = {
   api,
   listEmptyBlog,
   listWithOneBlog,
-  initialBlogs
+  initialBlogs,
+  ValidNonExistingId
 }

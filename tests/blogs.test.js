@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const { server } = require('../index')
 const Blog = require('../models/Blog')
-const { api, initialBlogs } = require('./helpers')
+const { api, initialBlogs, ValidNonExistingId } = require('./helpers')
 
 beforeEach(async () => {
   await Blog.deleteMany({})
@@ -83,7 +83,7 @@ describe('Create a Blog', () => {
     expect(response.body[initialBlogs.length].likes).toBe(0)
   })
 
-  test('blog without title is not added', async () => {
+  test('blog without title is not added and 400 is returned', async () => {
     const newBlog = {
       author: 'Mati test',
       url: 'N/A',
@@ -96,7 +96,7 @@ describe('Create a Blog', () => {
       .expect(400)
   })
 
-  test('blog without url is not added', async () => {
+  test('blog without url is not added and 400 is returned', async () => {
     const newBlog = {
       title: 'Prueba blog sin url',
       author: 'Mati test',
@@ -107,6 +107,32 @@ describe('Create a Blog', () => {
       .post('/api/blogs')
       .send(newBlog)
       .expect(400)
+  })
+})
+
+describe('viewing a specific note', () => {
+  test('succeeds with a valid id', async () => {
+    const blogsAtStart = await api.get('/api/blogs') // helper.notesInDb()
+    // console.log(blogsAtStart.body)
+    const blogToView = blogsAtStart.body[0]
+    // console.log({ blogToView })
+
+    const resultBlog = await api
+      .get(`/api/blogs/${blogToView.id}`)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    const processedBlogToView = JSON.parse(JSON.stringify(blogToView))
+
+    expect(resultBlog.body).toEqual(processedBlogToView)
+  })
+
+  test('fails with statuscode 404 if note does not exist', async () => {
+    // console.log({ ValidNonExistingId })
+
+    await api
+      .get(`/api/blogs/${ValidNonExistingId}`)
+      .expect(404)
   })
 })
 
