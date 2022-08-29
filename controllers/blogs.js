@@ -8,6 +8,7 @@ blogsRouter.get('/', async (request, response) => {
 
 blogsRouter.post('/', async (request, response) => {
   const newBlog = new Blog(request.body)
+  console.log({ newBlog })
   // Extraigo el campo likes, title y url del post del blog
   const {
     title,
@@ -24,18 +25,20 @@ blogsRouter.post('/', async (request, response) => {
       error: 'required "title" and "url" fild is missing'
     })
   }
+  console.log('ANTES DE ALMACENAR EN BASE DE DATOS')
   console.log({ newBlog })
   // Almaceno los datos del blog en la base de datos
-  const saveBlog = await newBlog.save()
-  response.status(201).json(saveBlog)
+  const savedBlog = await newBlog.save()
+  console.log({ savedBlog })
+  response.status(201).json(savedBlog)
 })
 
 blogsRouter.get('/:id', async (request, response) => {
   const { id } = request.params
-  console.log({ id })
+  // console.log({ id })
 
   const blog = await Blog.findById(id)
-  console.log({ blog })
+  // console.log({ blog })
   if (blog) return response.json(blog)
   response.status(404).end()
 })

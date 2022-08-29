@@ -1,8 +1,7 @@
 const { app } = require('../index')
 const supertest = require('supertest')
 const api = supertest(app)
-
-const ValidNonExistingId = '1308deceaa7c47d123456789'
+const Blog = require('../models/Blog')
 
 const listEmptyBlog = []
 
@@ -59,6 +58,19 @@ const initialBlogs = [
     likes: 2
   }
 ]
+
+const ValidNonExistingId = async () => {
+  const blog = new Blog({
+    title: 'Non exiting valid id',
+    author: 'Mati test',
+    url: 'N/A',
+    likes: 2
+  })
+  await blog.save()
+  await blog.remove()
+
+  return blog._id.toString()
+}
 
 module.exports = {
   api,

@@ -76,10 +76,6 @@ describe('Create a Blog', () => {
       .expect(201)
 
     const response = await api.get('/api/blogs')
-    // console.log('PRUEBO SIN LIKES')
-    // console.log(initialBlogs.length)
-    // console.log(response.body)
-    // console.log(response.body[initialBlogs.length].id)
     expect(response.body[initialBlogs.length].likes).toBe(0)
   })
 
@@ -112,11 +108,8 @@ describe('Create a Blog', () => {
 
 describe('viewing a specific note', () => {
   test('succeeds with a valid id', async () => {
-    const blogsAtStart = await api.get('/api/blogs') // helper.notesInDb()
-    // console.log(blogsAtStart.body)
+    const blogsAtStart = await api.get('/api/blogs')
     const blogToView = blogsAtStart.body[0]
-    // console.log({ blogToView })
-
     const resultBlog = await api
       .get(`/api/blogs/${blogToView.id}`)
       .expect(200)
@@ -128,10 +121,10 @@ describe('viewing a specific note', () => {
   })
 
   test('fails with statuscode 404 if note does not exist', async () => {
-    // console.log({ ValidNonExistingId })
+    const validNonexistingId = await ValidNonExistingId()
 
     await api
-      .get(`/api/blogs/${ValidNonExistingId}`)
+      .get(`/api/blogs/${validNonexistingId}`)
       .expect(404)
   })
 })
