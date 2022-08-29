@@ -83,22 +83,31 @@ describe('Create a Blog', () => {
     expect(response.body[initialBlogs.length].likes).toBe(0)
   })
 
-  /* test('blog without title is not added', async () => {
+  test('blog without title is not added', async () => {
     const newBlog = {
-      author: 'Sabato Ernesto',
-      url: 'www.sabato/unknown.com',
-      likes: 0
+      author: 'Mati test',
+      url: 'N/A',
+      likes: 23
     }
 
     await api
-      .post('/api/notes')
+      .post('/api/blogs')
       .send(newBlog)
       .expect(400)
+  })
 
-    const response = await api.get('/api/blogs')
+  test('blog without url is not added', async () => {
+    const newBlog = {
+      title: 'Prueba blog sin url',
+      author: 'Mati test',
+      likes: 23
+    }
 
-    expect(response.body).toHaveLength(initialBlogs.length)
-  }) */
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(400)
+  })
 })
 
 afterAll(() => {

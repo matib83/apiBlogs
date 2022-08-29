@@ -1,9 +1,16 @@
 const { Schema, model } = require('mongoose')
 
 const blogSchema = new Schema({
-  title: String,
+  // Hago el titulo requerido y la url requerida y unica
+  title: {
+    type: String,
+    requiered: true
+  },
   author: String,
-  url: String,
+  url: {
+    type: String,
+    requiered: true
+  },
   likes: Number
 })
 

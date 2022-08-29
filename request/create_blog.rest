@@ -2,8 +2,7 @@ POST http://localhost:3003/api/blogs
 Content-type: application/json
 
 {
-    "title": "Pruebo con los likes",
-    "author": "Mati test",
+    "title": "Falta autor",
     "url": "no tiene",
-    "likes": 2
+    "likes": 7
 }
