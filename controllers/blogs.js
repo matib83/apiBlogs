@@ -26,37 +26,24 @@ blogsRouter.post('/', async (request, response, next) => {
     })
   }
   // Almaceno los datos del blog en la base de datos
-  try {
-    const savedBlog = await newBlog.save()
-    console.log({ savedBlog })
-    response.status(201).json(savedBlog)
-  } catch (error) {
-    next(error)
-  }
+  const savedBlog = await newBlog.save()
+  console.log({ savedBlog })
+  response.status(201).json(savedBlog)
 })
 
 blogsRouter.get('/:id', async (request, response, next) => {
   const { id } = request.params
 
-  try {
-    const blog = await Blog.findById(id)
-    // console.log({ blog })
-    if (blog) return response.json(blog)
-    response.status(404).end()
-  } catch (error) {
-    next(error)
-  }
+  const blog = await Blog.findById(id)
+  // console.log({ blog })
+  if (blog) return response.json(blog)
 })
 
 blogsRouter.delete('/:id', async (request, response, next) => {
   const { id } = request.params
 
-  try {
-    await Blog.findByIdAndDelete(id)
-    response.status(204).end()
-  } catch (error) {
-    next(error)
-  }
+  await Blog.findByIdAndDelete(id)
+  response.status(204).end()
 })
 
 // Ahora realizamos la peticion de PUT para modificar contenido
@@ -64,13 +51,9 @@ blogsRouter.put('/:id', async (request, response, next) => {
   const { id } = request.params
   const newBlogInfo = request.body
 
-  try {
-    const newBlog = await Blog.findByIdAndUpdate(id, newBlogInfo, { new: true })
-    if (newBlog) return response.json(newBlog).status(204).end()
-    response.status(404).end()
-  } catch (error) {
-    next(error)
-  }
+  const newBlog = await Blog.findByIdAndUpdate(id, newBlogInfo, { new: true })
+  if (newBlog) return response.json(newBlog).status(204).end()
+  response.status(404).end()
 })
 
 module.exports = blogsRouter
