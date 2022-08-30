@@ -6,7 +6,7 @@ blogsRouter.get('/', async (request, response) => {
   response.json(blogs)
 })
 
-blogsRouter.post('/', async (request, response, next) => {
+blogsRouter.post('/', async (request, response) => {
   const newBlog = new Blog(request.body)
   console.log({ newBlog })
   // Extraigo el campo likes, title y url del post del blog
@@ -31,7 +31,7 @@ blogsRouter.post('/', async (request, response, next) => {
   response.status(201).json(savedBlog)
 })
 
-blogsRouter.get('/:id', async (request, response, next) => {
+blogsRouter.get('/:id', async (request, response) => {
   const { id } = request.params
 
   const blog = await Blog.findById(id)
@@ -39,7 +39,7 @@ blogsRouter.get('/:id', async (request, response, next) => {
   if (blog) return response.json(blog)
 })
 
-blogsRouter.delete('/:id', async (request, response, next) => {
+blogsRouter.delete('/:id', async (request, response) => {
   const { id } = request.params
 
   await Blog.findByIdAndDelete(id)
@@ -47,7 +47,7 @@ blogsRouter.delete('/:id', async (request, response, next) => {
 })
 
 // Ahora realizamos la peticion de PUT para modificar contenido
-blogsRouter.put('/:id', async (request, response, next) => {
+blogsRouter.put('/:id', async (request, response) => {
   const { id } = request.params
   const newBlogInfo = request.body
 
