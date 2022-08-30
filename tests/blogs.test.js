@@ -129,6 +129,31 @@ describe('viewing a specific note', () => {
   })
 })
 
+test('a blog can be deleted', async () => {
+  const firstResponse = await api.get('/api/blogs')
+  const { body: blogs } = firstResponse
+  const blogToDelete = blogs[0]
+  await api
+    .delete(`/api/blogs/${blogToDelete.id}`)
+    .expect(204)
+
+  const { body: secondResponse } = await api.get('/api/blogs')
+  const titles = secondResponse.map(blog => blog.title)
+  expect(secondResponse).toHaveLength(initialBlogs.length - 1)
+  expect(titles).not.toContain(blogToDelete.title)
+})
+
+test('a blog that do not exist can not be deleted', async () => {
+  const validNonexistingId = await ValidNonExistingId()
+  await api
+    .delete(`/api/blogs/${validNonexistingId}`)
+    .expect(204)
+
+  const { body: response } = await api.get('/api/blogs')
+
+  expect(response).toHaveLength(initialBlogs.length)
+})
+
 afterAll(() => {
   mongoose.connection.close()
   server.close()
