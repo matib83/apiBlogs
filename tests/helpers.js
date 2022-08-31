@@ -72,10 +72,16 @@ const ValidNonExistingId = async () => {
   return blog._id.toString()
 }
 
+const blogsInDb = async () => {
+  const blogs = await Blog.find({})
+  return blogs.map(blog => blog.toJSON())
+}
+
 module.exports = {
   api,
   listEmptyBlog,
   listWithOneBlog,
   initialBlogs,
-  ValidNonExistingId
+  ValidNonExistingId,
+  blogsInDb
 }

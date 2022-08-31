@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const { server } = require('../index')
 const Blog = require('../models/Blog')
-const { api, initialBlogs, ValidNonExistingId } = require('./helpers')
+const { api, initialBlogs, ValidNonExistingId, blogsInDb } = require('./helpers')
 
 beforeEach(async () => {
   await Blog.deleteMany({})
@@ -55,11 +55,10 @@ describe('Create a Blog', () => {
       .expect(201)
       .expect('Content-Type', /application\/json/)
 
-    const response = await api.get('/api/blogs')
+    const blogsAtEnd = await blogsInDb()
+    expect(blogsAtEnd).toHaveLength(initialBlogs.length + 1)
 
-    const titles = response.body.map(r => r.title)
-
-    expect(response.body).toHaveLength(initialBlogs.length + 1)
+    const titles = blogsAtEnd.map(b => b.title)
     expect(titles).toContain('Pruebo creando un nuevo blog válido')
   })
 
@@ -75,8 +74,8 @@ describe('Create a Blog', () => {
       .send(newBlog)
       .expect(201)
 
-    const response = await api.get('/api/blogs')
-    expect(response.body[initialBlogs.length].likes).toBe(0)
+    const blogsAtEnd = await blogsInDb()
+    expect(blogsAtEnd[initialBlogs.length].likes).toBe(0)
   })
 
   test('blog without title is not added and 400 is returned', async () => {
@@ -90,6 +89,9 @@ describe('Create a Blog', () => {
       .post('/api/blogs')
       .send(newBlog)
       .expect(400)
+
+    const blogsAtEnd = await blogsInDb()
+    expect(blogsAtEnd).toHaveLength(initialBlogs.length)
   })
 
   test('blog without url is not added and 400 is returned', async () => {
@@ -103,26 +105,28 @@ describe('Create a Blog', () => {
       .post('/api/blogs')
       .send(newBlog)
       .expect(400)
+
+    const blogsAtEnd = await blogsInDb()
+    expect(blogsAtEnd).toHaveLength(initialBlogs.length)
   })
 })
 
 describe('viewing a specific note', () => {
   test('succeeds with a valid id', async () => {
-    const blogsAtStart = await api.get('/api/blogs')
-    const blogToView = blogsAtStart.body[0]
+    const blogsAtStart = await blogsInDb()
+    const blogToView = blogsAtStart[0]
     const resultBlog = await api
       .get(`/api/blogs/${blogToView.id}`)
       .expect(200)
       .expect('Content-Type', /application\/json/)
 
     const processedBlogToView = JSON.parse(JSON.stringify(blogToView))
-
     expect(resultBlog.body).toEqual(processedBlogToView)
   })
 
   test('fails with statuscode 404 if note does not exist', async () => {
     const validNonexistingId = await ValidNonExistingId()
-
+    console.log({ validNonexistingId })
     await api
       .get(`/api/blogs/${validNonexistingId}`)
       .expect(404)
@@ -130,16 +134,16 @@ describe('viewing a specific note', () => {
 })
 
 test('a blog can be deleted', async () => {
-  const firstResponse = await api.get('/api/blogs')
-  const { body: blogs } = firstResponse
-  const blogToDelete = blogs[0]
+  const firstResponse = await blogsInDb()
+  const blogToDelete = firstResponse[0]
   await api
     .delete(`/api/blogs/${blogToDelete.id}`)
     .expect(204)
 
-  const { body: secondResponse } = await api.get('/api/blogs')
-  const titles = secondResponse.map(blog => blog.title)
+  const secondResponse = await blogsInDb()
   expect(secondResponse).toHaveLength(initialBlogs.length - 1)
+
+  const titles = secondResponse.map(blog => blog.title)
   expect(titles).not.toContain(blogToDelete.title)
 })
 
@@ -149,9 +153,9 @@ test('a blog that do not exist can not be deleted', async () => {
     .delete(`/api/blogs/${validNonexistingId}`)
     .expect(204)
 
-  const { body: response } = await api.get('/api/blogs')
+  const blogs = await blogsInDb()
 
-  expect(response).toHaveLength(initialBlogs.length)
+  expect(blogs).toHaveLength(initialBlogs.length)
 })
 
 afterAll(() => {
