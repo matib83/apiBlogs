@@ -8,6 +8,7 @@ const notesRouter = require('./controllers/blogs')
 const notFound = require('./middleware/notFound.js')
 const handleErrors = require('./middleware/handleErrors.js')
 const usersRouter = require('./controllers/users')
+const loginRouter = require('./controllers/login')
 
 app.use(cors())
 app.use(express.json())
@@ -19,6 +20,8 @@ app.get('/', (request, response) => {
 app.use('/api/blogs', notesRouter)
 
 app.use('/api/users', usersRouter)
+
+app.use('/api/login', loginRouter)
 
 app.use(notFound)
 
