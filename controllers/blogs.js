@@ -1,5 +1,6 @@
 const blogsRouter = require('express').Router()
 const Blog = require('../models/Blog')
+const User = require('../models/User')
 
 blogsRouter.get('/', async (request, response) => {
   const blogs = await Blog.find({})
@@ -7,27 +8,37 @@ blogsRouter.get('/', async (request, response) => {
 })
 
 blogsRouter.post('/', async (request, response) => {
-  const newBlog = new Blog(request.body)
-  console.log({ newBlog })
   // Extraigo el campo likes, title y url del post del blog
   const {
     title,
+    author,
     url,
-    likes
-  } = newBlog
-
-  if (likes === undefined) {
-    newBlog.likes = 0
-  }
+    likes,
+    userId
+  } = request.body
 
   if (!title || !url) {
     return response.status(400).json({
       error: 'required "title" and "url" fild is missing'
     })
   }
+
+  const user = await User.findById(userId)
+  const newBlog = new Blog({
+    title,
+    author,
+    url,
+    likes: likes === undefined ? 0 : likes,
+    user: user._id
+  })
+
   // Almaceno los datos del blog en la base de datos
   const savedBlog = await newBlog.save()
-  console.log({ savedBlog })
+  // console.log({ savedBlog })
+
+  user.blogs = user.blogs.concat(savedBlog._id)
+  await user.save()
+
   response.status(201).json(savedBlog)
 })
 

@@ -2,7 +2,8 @@ POST http://localhost:3003/api/blogs
 Content-type: application/json
 
 {
-    "title": "Falta autor",
-    "url": "no tiene",
-    "likes": 7
+  "title": "El tunel",
+  "author": "Sabato Ernesto",
+  "url": "http://blog.matib83.com/ElTunel",
+  "userId": "631620a45a134e629e39694f"
 }
