@@ -60,11 +60,26 @@ blogsRouter.get('/:id', async (request, response) => {
   response.status(404).end()
 })
 
-blogsRouter.delete('/:id', async (request, response) => {
+blogsRouter.delete('/:id', userExtractor, async (request, response, next) => {
   const { id } = request.params
-
-  await Blog.findByIdAndDelete(id)
-  response.status(204).end()
+  const { userId } = request
+  console.log('Prueba delete')
+  console.log({ id })
+  console.log({ userId })
+  try {
+    const user = await User.findById(userId)
+    console.log({ user })
+    const blog = await Blog.findById(id)
+    console.log({ blog })
+    if (!blog) return response.status(404).end()
+    if (blog.user.toString() === user._id.toString()) {
+      await Blog.findByIdAndDelete(id)
+      return response.status(204).end()
+    }
+    return response.status(401).send({ error: 'It is not possible delete Blogs from another user' }).end()
+  } catch (error) {
+    next(error)
+  }
 })
 
 // Ahora realizamos la peticion de PUT para modificar contenido

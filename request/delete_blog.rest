@@ -1,1 +1,26 @@
+DELETE http://localhost:3003/api/blogs/631893e0de13e6d45ce94c7b
+Content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzMTYyMGE0NWExMzRlNjI5ZTM5Njk0ZiIsInVzZXJuYW1lIjoibWF0aWI4MyIsImlhdCI6MTY2MjU2Nzk2NSwiZXhwIjoxNjYzMTcyNzY1fQ.zZALYDFJZ7AHIPtmutvndf3MhJRkob57DXhPQzOo8W0
+
+### 
+// Metododo para eliminar Blog que no existe
+DELETE http://localhost:3003/api/blogs/1234b28747d809504251878e
+Content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzMTYyMGE0NWExMzRlNjI5ZTM5Njk0ZiIsInVzZXJuYW1lIjoibWF0aWI4MyIsImlhdCI6MTY2MjU2Nzk2NSwiZXhwIjoxNjYzMTcyNzY1fQ.zZALYDFJZ7AHIPtmutvndf3MhJRkob57DXhPQzOo8W0
+
+###
+
+// Metododo para eliminar Blog mal formado
+DELETE http://localhost:3003/api/blogs/6318b28747d809504251878
+Content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzMTYyMGE0NWExMzRlNjI5ZTM5Njk0ZiIsInVzZXJuYW1lIjoibWF0aWI4MyIsImlhdCI6MTY2MjU2Nzk2NSwiZXhwIjoxNjYzMTcyNzY1fQ.zZALYDFJZ7AHIPtmutvndf3MhJRkob57DXhPQzOo8W0
+
+###
+// Metododo para eliminar Blog con token invalido
+DELETE http://localhost:3003/api/blogs/630e3eba594b52442f0a93b5
+Content-type: application/json
+Authorization: Bearer ryJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzMTYyMGE0NWExMzRlNjI5ZTM5Njk0ZiIsInVzZXJuYW1lIjoibWF0aWI4MyIsImlhdCI6MTY2MjU1MTU3MywiZXhwIjoxNjYzMTU2MzczfQ.66mn_VeR_SUPRAu7f7eCe6Kn_2S1tiu63OLaUdNdiQQ
+
+###
+// Metododo para eliminar Blog viejo (sin token)
 DELETE http://localhost:3003/api/blogs/630e3eba594b52442f0a93b5
