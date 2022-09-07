@@ -3,7 +3,7 @@ Content-type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzMTYyMGE0NWExMzRlNjI5ZTM5Njk0ZiIsInVzZXJuYW1lIjoibWF0aWI4MyIsImlhdCI6MTY2MjU1MTU3MywiZXhwIjoxNjYzMTU2MzczfQ.66mn_VeR_SUPRAu7f7eCe6Kn_2S1tiu63OLaUdNdiQQ
 
 {
-  "title": "Probando token",
+  "title": "Probando nueva forma de ver los datos",
   "author": "Uknown",
   "url": "N/A"
 }

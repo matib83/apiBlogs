@@ -2,20 +2,20 @@ const { Schema, model } = require('mongoose')
 
 const blogSchema = new Schema({
   // Hago el titulo requerido y la url requerida y unica
+  url: {
+    type: String,
+    requiered: true
+  },
   title: {
     type: String,
     requiered: true
   },
   author: String,
-  url: {
-    type: String,
-    requiered: true
-  },
-  likes: Number,
   user: {
     type: Schema.Types.ObjectId,
     ref: 'User'
-  }
+  },
+  likes: Number
 })
 
 blogSchema.set('toJSON', {
