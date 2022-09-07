@@ -2,6 +2,15 @@ const ERROR_HANDLERS = {
   CastError: res =>
     res.status(400).send({ error: 'id used is malformed' }), // error por una solicitud desconocida
 
+  ValidationError: (res, { message }) =>
+    res.status(409).send({ error: message }),
+
+  JsonWebTokenError: res =>
+    res.status(401).send({ error: 'token missing or invalid' }), // error por token invalido
+
+  TokenExpiredError: res =>
+    res.status(401).send({ error: 'token expired' }), // error por token invalido
+
   defaultError: res => res.status(500).end() // Error de nuestro servidor
 }
 
