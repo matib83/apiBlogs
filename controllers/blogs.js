@@ -1,22 +1,14 @@
 const blogsRouter = require('express').Router()
 const Blog = require('../models/Blog')
 const User = require('../models/User')
-const jwt = require('jsonwebtoken')
-
-const getTokenFrom = request => {
-  const authorization = request.get('authorization')
-  if (authorization && authorization.toLowerCase().startsWith('bearer')) {
-    return authorization.substring(7)
-  }
-  return null
-}
+const userExtractor = require('../middleware/userExtractor')
 
 blogsRouter.get('/', async (request, response) => {
   const blogs = await Blog.find({}).populate('user', { username: 1 })
   response.json(blogs)
 })
 
-blogsRouter.post('/', async (request, response) => {
+blogsRouter.post('/', userExtractor, async (request, response, next) => {
   // Extraigo el campo likes, title y url del post del blog
   const {
     title,
@@ -25,23 +17,17 @@ blogsRouter.post('/', async (request, response) => {
     likes
   } = request.body
 
-  console.log(request.body)
-
-  const token = getTokenFrom(request)
-  console.log({ token })
-  const decodedToken = jwt.verify(token, process.env.SECRET)
-
-  if (!token || !decodedToken.id) {
-    return response.status(401).json({ error: 'token missing or invalid' })
-  }
-
+  // console.log(request.body)
   if (!title || !url) {
     return response.status(400).json({
       error: 'required "title" and "url" fild is missing'
     })
   }
 
-  const user = await User.findById(decodedToken.id)
+  // El middleware "userExtractor" que ya se ejecuto primero, utilizo el token de la request para obtener
+  // el Id del usuario (si es válido) modificando el ID de la request para reeemplazarlo por el token decodificado
+  const { userId } = request
+  const user = await User.findById(userId)
 
   const newBlog = new Blog({
     title,
@@ -55,10 +41,14 @@ blogsRouter.post('/', async (request, response) => {
   const savedBlog = await newBlog.save()
   // console.log({ savedBlog })
 
-  user.blogs = user.blogs.concat(savedBlog._id)
-  await user.save()
+  try {
+    user.blogs = user.blogs.concat(savedBlog._id)
+    await user.save()
 
-  response.status(201).json(savedBlog)
+    response.status(201).json(savedBlog)
+  } catch (error) {
+    next(error)
+  }
 })
 
 blogsRouter.get('/:id', async (request, response) => {
